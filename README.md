@@ -52,7 +52,7 @@ O projeto utiliza a **curva de Hilbert**, que percorre os pontos de uma imagem d
 3. **Rodar o código**:
    Para gerar a música a partir de uma imagem:
    ```bash
-   python main.py
+   python main.py nome_da_foto
    ```
 
 4. **Ouça a música**:
