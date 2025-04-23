@@ -33,3 +33,14 @@ def instrumento_3(r, g, b):
     wave = np.sin(2 * np.pi * freq * t)
     envelope = np.exp(-4 * t)
     return 0.3 * wave * envelope * tremolo * (g / 255)
+
+
+# 🎸 Baixo — Som grave e encorpado
+def instrumento_4(r, g, b):
+    freq = 40 + (r / 255) * 80  # faixa de 40 Hz a 120 Hz
+    dur = 0.5
+    t = np.linspace(0, dur, int(sample_rate * dur), False)
+    envelope = np.exp(-2 * t)  # decay mais suave
+    wave = (np.sin(2 * np.pi * freq * t) +
+            0.2 * np.sign(np.sin(2 * np.pi * freq * t)))  # base + leve onda quadrada
+    return 0.3 * wave * envelope * (b / 255)
