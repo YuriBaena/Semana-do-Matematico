@@ -2,7 +2,7 @@ import numpy as np
 import sounddevice as sd
 import pygame
 import math
-from som import instrumento_1, instrumento_2, instrumento_3
+from som import instrumento_1, instrumento_2, instrumento_3, instrumento_4
 from functions import Pixels
 
 sample_rate = 44100
@@ -22,17 +22,20 @@ def gerar_musica(pixels):
         pixel1 = pixels[i]
         pixel2 = pixels[i + 1]
         pixel3 = pixels[i + 2]
+        pixel4 = pixels[i - 1]
 
         onda1 = instrumento_1(*pixel1)
         onda2 = instrumento_2(*pixel2)
         onda3 = instrumento_3(*pixel3)
+        onda4 = instrumento_4(*pixel4)
 
-        min_len = min(len(onda1), len(onda2), len(onda3))
+        min_len = min(len(onda1), len(onda2), len(onda3), len(onda4))
         onda1 = onda1[:min_len]
         onda2 = onda2[:min_len]
         onda3 = onda3[:min_len]
+        onda4 = onda4[:min_len]
 
-        combinada = onda1 + onda2 + onda3
+        combinada = onda1 + onda2 + onda3 + onda4
         combinada /= np.max(np.abs(combinada))
         ondas.append(combinada)
 
