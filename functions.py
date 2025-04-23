@@ -59,7 +59,7 @@ def Hilbert_Curve(index, length=1, level=1, offset=False):
 
 # Função para devolver lista de rgb de cada pixel de uma imagem
 #  com o padrão da Curva de Hilbert
-def Pixels(caminho_imagem='DavidHilbert.jpeg'):
+def Pixels(caminho_imagem='DavidHilbert.jpeg', porcentagem=0.07):
 
     # Abrir a imagem e redimensionar
     imagem = Image.open(caminho_imagem).resize((512, 512))
@@ -75,12 +75,15 @@ def Pixels(caminho_imagem='DavidHilbert.jpeg'):
     # Gerar os pontos da curva
     hilbert_points = [Hilbert_Curve(i, tamanho_celula, s, True) for i in range(t)]
 
-    # Obter os valores RGB na ordem da curva de Hilbert
+    # Obter os valores RGB na ordem da curva de Hilbert  262144 13108
     pixels = imagem.load()
     cores_rgb = []
 
-    for ponto in hilbert_points:
-        x, y = int(ponto[0]), int(ponto[1])
+    tam = len(hilbert_points)
+    passo = int(tam / (tam * porcentagem))
+
+    for ponto in range(0, tam, passo):
+        x, y = int(hilbert_points[ponto][0]), int(hilbert_points[ponto][1])
         if 0 <= x < imagem.width and 0 <= y < imagem.height:
             rgb = pixels[x, y]
             cores_rgb.append(rgb)
@@ -89,4 +92,4 @@ def Pixels(caminho_imagem='DavidHilbert.jpeg'):
 
 
 if __name__ == "__main__":
-    print(Pixels()[:10])
+    print(len(Pixels()))
