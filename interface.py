@@ -1,17 +1,14 @@
 import tkinter as tk
 from tkinter import filedialog
 import subprocess
-import os
 
 def escolher_imagem():
     caminho = filedialog.askopenfilename(
         title="Escolha uma imagem",
-        initialdir="Fotos",
         filetypes=[("Imagens", "*.jpg *.jpeg *.png")]
     )
     if caminho:
-        nome_arquivo = os.path.basename(caminho)
-        subprocess.run(["python3", "main.py", nome_arquivo])
+        subprocess.run(["python3", "main.py", caminho])
 
 def iniciar_interface():
     root = tk.Tk()

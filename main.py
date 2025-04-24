@@ -2,6 +2,7 @@ import numpy as np
 import sounddevice as sd
 import pygame
 import math
+import sys
 from som import instrumento_1, instrumento_2, instrumento_3, instrumento_4
 from functions import Pixels
 
@@ -118,8 +119,14 @@ def visualizar_circular_em_tempo_real(musica):
 
 
 if __name__ == "__main__":
-    print("Carregando pixels da imagem...")
-    pixels = Pixels("DavidHilbert.jpeg", porcentagem=0.01)
+    if len(sys.argv) < 2:
+        print("Por favor, forneça o caminho da imagem como argumento.")
+        sys.exit(1)
+
+    caminho_imagem = sys.argv[1]
+
+    print(f"Carregando pixels da imagem: {caminho_imagem}")
+    pixels = Pixels(caminho_imagem, porcentagem=0.01)
     print(f"{len(pixels)} pixels lidos. Gerando música...")
     musica = gerar_musica(pixels)
 

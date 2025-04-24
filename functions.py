@@ -62,7 +62,7 @@ def Hilbert_Curve(index, length=1, level=1, offset=False):
 def Pixels(caminho_imagem='DavidHilbert.jpeg', porcentagem=0.07):
 
     # Abrir a imagem e redimensionar
-    imagem = Image.open(caminho_imagem).resize((512, 512))
+    imagem = Image.open(caminho_imagem).convert("RGB").resize((512, 512))
 
     # Parâmetros da curva de Hilbert
     s = 9  # Nível da curva
