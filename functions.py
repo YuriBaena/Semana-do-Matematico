@@ -1,4 +1,5 @@
 from PIL import Image
+import numpy as np
 
 # Função para achar pontos na curva de hilbert
 def Hilbert_Curve(index, length=1, level=1, offset=False):
@@ -89,6 +90,21 @@ def Pixels(caminho_imagem='DavidHilbert.jpeg', porcentagem=0.07):
             cores_rgb.append(rgb)
 
     return cores_rgb;
+
+def analisar_imagem(caminho_imagem='DavidHilbert.jpeg'):
+    # Abrir a imagem e redimensionar
+    imagem = Image.open(caminho_imagem).convert("RGB").resize((128, 128))  # Reduz para performance
+    pixels = np.array(imagem).reshape(-1, 3) / 255.0  # Normaliza para 0-1
+
+    brilho_medio = np.mean(np.mean(pixels, axis=1))
+    saturacao_media = np.mean(np.max(pixels, axis=1) - np.min(pixels, axis=1))
+
+    cores_unicas = len(np.unique(pixels.round(2), axis=0))
+    variedade_de_cores = cores_unicas / (128*128)
+
+    cor_media = np.mean(pixels, axis=0)  # média de (r, g, b)
+
+    return brilho_medio, saturacao_media, variedade_de_cores, cor_media
 
 
 if __name__ == "__main__":
