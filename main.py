@@ -98,17 +98,14 @@ def gerar_musica(pixels, estilo):
     return musica.astype(np.float32)
 
 # Função para visualizar a música em tempo real
-def visualizar_circular_em_tempo_real(musica):
+def visualizar_em_tempo_real(musica):
     pygame.init()
-    largura, altura = 800, 800
+    largura, altura = 800, 400
     tela = pygame.display.set_mode((largura, altura))
-    pygame.display.set_caption("Visualizador Circular de Frequência")
+    pygame.display.set_caption("Visualizador de Espectro 🎧")
     relogio = pygame.time.Clock()
 
-    cx, cy = largura // 2, altura // 2
-    num_barras = 180
-    raio_base = 100
-    escala_altura = 300
+    num_barras = 200
     pos = 0
     rodando = True
 
@@ -143,25 +140,21 @@ def visualizar_circular_em_tempo_real(musica):
             continue
 
         bloco = musica[pos:pos + chunk]
-        janela = np.hanning(len(bloco))
-        fft = np.abs(np.fft.rfft(bloco * janela))[:num_barras]
+        fft = np.abs(np.fft.rfft(bloco * np.hanning(len(bloco))))
+        fft = fft[:num_barras]  # usar só as frequências mais baixas
         if np.max(fft) != 0:
             fft /= np.max(fft)
 
-        tela.fill((0, 0, 0))
-
+        tela.fill((10, 10, 10))
+        largura_barra = largura / num_barras
         for i in range(num_barras):
-            angulo = (i / num_barras) * 2 * math.pi
-            frequencia = i * (sample_rate / 2) / num_barras
-            hue = freq_para_hue(frequencia)
+            altura_barra = fft[i] * altura
+            x = i * largura_barra
+            y = altura - altura_barra
+            hue = int((i / num_barras) * 360)
             cor = pygame.Color(0)
             cor.hsva = (hue, 100, 100, 100)
-            altura_barra = fft[i] * escala_altura
-
-            x_final = int(cx + math.cos(angulo) * (raio_base + altura_barra))
-            y_final = int(cy + math.sin(angulo) * (raio_base + altura_barra))
-
-            pygame.draw.line(tela, cor, (cx, cy), (x_final, y_final), 2)
+            pygame.draw.rect(tela, cor, (x, y, largura_barra - 2, altura_barra))
 
         pygame.display.flip()
         relogio.tick(60)
@@ -169,6 +162,7 @@ def visualizar_circular_em_tempo_real(musica):
     stream.stop()
     stream.close()
     pygame.quit()
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -179,14 +173,14 @@ if __name__ == "__main__":
 
     print(f"Carregando pixels da imagem: {caminho_imagem}")
     brilho, saturacao, variedade, cor_media = analisar_imagem(caminho_imagem)
-    pixels = Pixels(caminho_imagem, porcentagem=0.01)
+    pixels = Pixels(caminho_imagem, porcentagem=0.05)
     print(f"{len(pixels)} pixels lidos. Gerando música...")
 
     estilo = configurar_estilo(brilho, saturacao, variedade, cor_media)
     musica = gerar_musica(pixels, estilo)
 
-    duracao_total = 15
+    duracao_total = 30
     samples_maximos = int(sample_rate * duracao_total)
     musica = musica[:samples_maximos]
 
-    visualizar_circular_em_tempo_real(musica)
+    visualizar_em_tempo_real(musica)
