@@ -11,7 +11,7 @@ def escolher_imagem():
         filetypes=[("Imagens", "*.jpg *.jpeg *.png")]
     )
     if caminho:
-        subprocess.run(["python", "main.py", caminho])
+        subprocess.run(["python3", "main.py", caminho])
 
 def iniciar_interface():
     root = tk.Tk()
